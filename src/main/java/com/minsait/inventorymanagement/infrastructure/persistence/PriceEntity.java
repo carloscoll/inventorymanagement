@@ -16,6 +16,10 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class PriceEntity {
 
+    @Id
+    @Column(name = "ID")
+    private Long id;
+
     @Column(name = "BRAND_ID")
     private Long brandId;
 
@@ -25,7 +29,6 @@ public class PriceEntity {
     @Column(name = "END_DATE")
     private String endDate;
 
-    @Id
     @Column(name = "PRICE_LIST")
     private Long priceList;
 

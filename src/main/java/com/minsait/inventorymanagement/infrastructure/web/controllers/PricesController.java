@@ -1,14 +1,12 @@
 package com.minsait.inventorymanagement.infrastructure.web.controllers;
 
-import com.minsait.inventorymanagement.domain.entities.Price;
 import com.minsait.inventorymanagement.domain.services.PricesService;
+import com.minsait.inventorymanagement.infrastructure.web.dtos.PriceDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -24,15 +22,20 @@ public class PricesController {
         this.pricingService = pricesService;
     }
 
-    @GetMapping("/calculate")
-    public ResponseEntity<Price> getPrice(
+    @GetMapping("/getPVP")
+    public ResponseEntity<PriceDto> getPrice(
             @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date,
             @RequestParam("productId") Long productId,
             @RequestParam("brandId") Long brandId) {
 
-        Optional<Price> price = pricingService.calculatePrice(date, productId, brandId);
+        Optional<PriceDto> price = pricingService.calculatePrice(date, productId, brandId);
 
         return price.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handlePriceCalculationException(Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
     }
 }

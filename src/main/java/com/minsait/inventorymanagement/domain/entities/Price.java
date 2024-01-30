@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Price {
+    private Long id;
     private Long brandId;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
@@ -21,6 +22,4 @@ public class Price {
     private int priority;
     private BigDecimal price;
     private String currency;
-
-    // Constructor, getters y setters
 }
